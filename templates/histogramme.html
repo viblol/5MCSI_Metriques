@@ -1,42 +1,43 @@
 <html>
   <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-google.charts.load('current', { packages: ['corechart'] });
-google.charts.setOnLoadCallback(drawBackgroundColor);
-
-function drawBackgroundColor() {
-  // Récupération de données depuis notre API /paris/
-  fetch('/paris/')
-    .then(response => response.json())
-    .then(data => {
-      drawChart(data.results);
-    });
-}
-
-function drawChart(data) {
-  // Préparer le tableau de données pour google.visualization.arrayToDataTable
-  var dataArray = [['Date', 'Valeur']];
-  data.forEach(entry => {
-    var date = new Date(entry.Jour * 1000); // Convertir le timestamp en date
-    dataArray.push([date.toLocaleDateString(), entry.temp]); // Ajouter chaque entrée dans le tableau
-  });
-
-  // Utiliser arrayToDataTable pour convertir dataArray en dataTable
-  var dataTable = google.visualization.arrayToDataTable(dataArray);
-
-  // Configurer les options du graphique
-  var options = {
-    title: 'Évolution des températures de Paris pour les 16 prochains jours',
-    curveType: 'function',
-    legend: { position: 'bottom' }
-  };
-
-  // Dessiner le graphique en ligne
-  var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-  chart.draw(dataTable, options);
-}
-
-</script>
+      google.charts.load('current', { packages: ['corechart'] });
+      google.charts.setOnLoadCallback(drawBackgroundColor);
+      
+      function drawBackgroundColor() {
+        // Récupération de données depuis notre API /paris/
+        fetch('/paris/')
+          .then(response => response.json())
+          .then(data => {
+            drawChart(data.results);
+          });
+      }
+      
+      function drawChart(data) {
+        // Préparer le tableau de données pour google.visualization.arrayToDataTable
+        var dataArray = [['Date', 'Valeur']];
+        data.forEach(entry => {
+          var date = new Date(entry.Jour * 1000); // Convertir le timestamp en date
+          dataArray.push([date.toLocaleDateString(), entry.temp]); // Ajouter chaque entrée dans le tableau
+        });
+      
+        // Utiliser arrayToDataTable pour convertir dataArray en dataTable
+        var dataTable = google.visualization.arrayToDataTable(dataArray);
+      
+        // Configurer les options du graphique
+        var options = {
+          title: 'Évolution des températures de Paris pour les 16 prochains jours',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+      
+        // Dessiner le graphique en ligne
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(dataTable, options);
+      }
+      
+      </script>
   </head>
   <body>
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
