@@ -2,46 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commit Dates</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        ul {
-            list-style-type: none;
-        }
-        li {
-            margin: 5px 0;
-        }
-    </style>
+    <title>Commits Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Inclusion de Chart.js -->
 </head>
 <body>
-    <h1>Commit Dates</h1>
-    <ul id="commit-dates"></ul>
+    <h1>Commits Over Time</h1>
+    <canvas id="commitsChart" width="800" height="400"></canvas> <!-- Canvas pour le graphique -->
 
     <script>
-        const apiUrl = "https://api.github.com/repos/viblol/5MCSI_Metriques/commits";
+        const apiUrl = "https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits";
 
         async function fetchCommitDates() {
             try {
                 const response = await fetch(apiUrl);
                 const commits = await response.json();
 
-                const datesList = document.getElementById('commit-dates');
-                datesList.innerHTML = ''; // Clear existing list items, if any
-
-                commits.forEach(commit => {
-                    const date = commit.commit.author.date;
-                    const listItem = document.createElement('li');
-                    listItem.textContent = date;
-                    datesList.appendChild(listItem);
+                const dates = commits.map(commit => commit.commit.author.date);
+                const formattedDates = dates.map(date => {
+                    // Convertit la date ISO en un format plus lisible
+                    const dateObj = new Date(date);
+                    return `${dateObj.getFullYear()}-${dateObj.getMonth()+1}-${dateObj.getDate()}`;
                 });
+
+                // Compter les commits par date
+                const counts = formattedDates.reduce((acc, date) => {
+                    acc[date] = (acc[date] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const chartLabels = Object.keys(counts);
+                const chartData = Object.values(counts);
+
+                drawChart(chartLabels, chartData);
             } catch (error) {
                 console.error('Error fetching commit dates:', error);
-                document.getElementById('commit-dates').innerHTML = '<li>Error fetching data.</li>';
             }
+        }
+
+        function drawChart(labels, data) {
+            const ctx = document.getElementById('commitsChart').getContext('2d');
+            const commitsChart = new Chart(ctx, {
+                type: 'line', // Type de graphique
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Commits per Day',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
 
         fetchCommitDates();
