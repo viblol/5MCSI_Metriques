@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Commits Graph Enhanced</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Enhanced Commits Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            margin: 500px;
+            margin: 20px;
             text-align: center;
         }
-        canvas {
+        #commitsChart {
+            max-width: 1000px; /* Largeur maximale du graphique */
+            height: 500px; /* Hauteur du graphique */
             margin: auto;
             background-color: #f8f9fa;
             border: 1px solid #ddd;
@@ -20,7 +22,7 @@
 </head>
 <body>
     <h1>Enhanced Commits Minute by Minute</h1>
-    <div style="width: 80%; height: 500px"; >
+    <div style="width:80%; margin: 0 auto;">
         <canvas id="commitsChart"></canvas>
     </div>
 
