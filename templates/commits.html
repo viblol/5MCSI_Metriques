@@ -1,1 +1,50 @@
-https://api.github.com/repos/viblol/5MCSI_Metriques/commits
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commit Dates</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Commit Dates</h1>
+    <ul id="commit-dates"></ul>
+
+    <script>
+        const apiUrl = "https://api.github.com/repos/viblol/5MCSI_Metriques/commits";
+
+        async function fetchCommitDates() {
+            try {
+                const response = await fetch(apiUrl);
+                const commits = await response.json();
+
+                const datesList = document.getElementById('commit-dates');
+                datesList.innerHTML = ''; // Clear existing list items, if any
+
+                commits.forEach(commit => {
+                    const date = commit.commit.author.date;
+                    const listItem = document.createElement('li');
+                    listItem.textContent = date;
+                    datesList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error fetching commit dates:', error);
+                document.getElementById('commit-dates').innerHTML = '<li>Error fetching data.</li>';
+            }
+        }
+
+        fetchCommitDates();
+    </script>
+</body>
+</html>
