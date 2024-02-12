@@ -38,6 +38,10 @@ def monhistogramme():
 @app.route("/contact/")
 def moncontact():
     return render_template("contact.html")
+
+@app.route("/commits/")
+def mescommits():
+    return render_template("commits.html")
   
 if __name__ == "__main__":
   app.run(debug=True)
